@@ -1,9 +1,17 @@
 #!/bin/bash
+VENVDIR=/tmp/venv/clinton-email-cruncher
+if [ ! -d "$VENVDIR" ]; then
+	echo "creating venv in $VENVDIR"
+	python3 -m venv $VENVDIR
+	source $VENVDIR/bin/activate
+	echo "installing required packages"
+	pip install -r requirements.txt
+else
+	echo "activating existing venv"
+	source $VENVDIR/bin/activate
+fi
 mkdir -p pdfs/
 mkdir -p zips/
-python3 -m venv create virt-hrcemail
-source virt-hrcemail/bin/activate
-pip install -r requirements.txt
 python downloadMetadata.py
 python generatePDFList.py
 if [ "$1" = "no-pdf-download" ]
