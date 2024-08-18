@@ -29,4 +29,4 @@ class Name(BaseModel):
 
 db.connect()
 #create tables if they don't exist
-db.create_tables([Document,Name],True)
+db.create_tables([Document,Name])

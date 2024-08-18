@@ -1,10 +1,12 @@
 #!/bin/bash
 mkdir -p pdfs/
 mkdir -p zips/
+python3 -m venv create virt-hrcemail
 source virt-hrcemail/bin/activate
+pip install -r requirements.txt
 python downloadMetadata.py
 python generatePDFList.py
-if [ "$1" = "no-pdf-download" ] 
+if [ "$1" = "no-pdf-download" ]
 then 
     echo "skipping PDF download"
 else

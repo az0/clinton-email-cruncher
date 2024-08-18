@@ -36,13 +36,21 @@ def getAPIPage(start=0,limit=1000,page=1):
 	
 	#SSL certificate not verified by certifi module for some reason	
 	request = requests.get(query_base,params=params)
-		
+
+	if not request.status_code == 200:
+		print(f'ERROR: getAPIPage() has status code {request.status_code}')
 	return_json = request.text
 	#date objects not valid json, extract timestamp
 	return_json = re.sub(r'new Date\(([0-9]{1,})\)',r'\1',return_json)
 	#negitive dates are invalid, and can sometimes be shown as newDate()
 	return_json = re.sub(r'new ?Date\((-[0-9]{1,})\)',r'null',return_json)
-	return json.loads(return_json)
+	try:
+		return_dict = json.loads(return_json)
+	except ValueError:
+		print('ValueError in loads()')
+		import pdb;pdb.set_trace()
+
+	return return_dict
 
 def compileResultsList(results_list=[],start=0, limit=1000):
 	metadata_response = getAPIPage(start=start,limit=limit)
@@ -62,8 +70,8 @@ def formatTimestamp(timestamp):
 
 results_list = compileResultsList()
 
-print "got",len(results_list),"total document rows"
-print "writing rows to sqlite database ..."
+print("got",len(results_list),"total document rows")
+print("writing rows to sqlite database ...")
 
 with db.transaction():
 	for result in results_list:
