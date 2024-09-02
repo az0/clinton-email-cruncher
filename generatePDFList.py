@@ -10,8 +10,9 @@ generatePDFList.py
 
 from hrcemail_common import *
 
-pdf_base = "https://foia.state.gov/searchapp/"
+pdf_base = "https://foia.state.gov/"
 
 with open('pdflist.txt', 'w') as list_file:
 	for doc in Document.select():
+		pdf_link = doc.pdfLink.replace('\\','/')
 		list_file.write(pdf_base+doc.pdfLink+"\n")

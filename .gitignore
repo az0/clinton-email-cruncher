@@ -1,6 +1,8 @@
 pdfs/
+zips/
+pdflist.txt
 virt-hrcemail/
 *.sqlite
 *.pyc
-pdflist.txt
+*.bak
 *.zip

@@ -20,7 +20,7 @@ from hrcemail_common import *
 
 requests_cache.install_cache("HRCEMAIL_metadata_cache",expire_after=300)
 
-query_base = "https://foia.state.gov/searchapp/Search/SubmitSimpleQuery"
+query_base = "https://foia.state.gov/api/Search/SubmitSimpleQuery"
 
 def getAPIPage(start=0,limit=1000,page=1):
 	params = {"searchText": "*",
@@ -35,10 +35,11 @@ def getAPIPage(start=0,limit=1000,page=1):
 	"limit": limit}
 	
 	#SSL certificate not verified by certifi module for some reason	
+	print(f"getAPIPage({start},{limit},{page})")
 	request = requests.get(query_base,params=params)
 
 	if not request.status_code == 200:
-		print(f'ERROR: getAPIPage() has status code {request.status_code}')
+		print(f'ERROR: request.get() in getAPIPage() has status code {request.status_code}')
 	return_json = request.text
 	#date objects not valid json, extract timestamp
 	return_json = re.sub(r'new Date\(([0-9]{1,})\)',r'\1',return_json)
@@ -63,15 +64,19 @@ def compileResultsList(results_list=[],start=0, limit=1000):
 	return results_list
 	
 def formatTimestamp(timestamp):
-	try:
+	# If timestamp is an integer (or a string with an integer) then...
+	if isinstance(timestamp, int):
 		return datetime.fromtimestamp(timestamp/1000).strftime("%Y-%m-%d")
-	except TypeError:
-		return None
+	# If timestamp is in format "2019-05-14T00:00:00" return just the date.
+	# As of 2024-08-31, this is the only format seen.
+	if re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$",timestamp):
+		# As of 2024-08-31, this is the only format seen.
+		return timestamp[0:10]
 
 results_list = compileResultsList()
 
-print("got",len(results_list),"total document rows")
-print("writing rows to sqlite database ...")
+print(f"got {len(results_list)} total document rows")
+print("writing rows to SQLite database ...")
 
 with db.transaction():
 	for result in results_list:
@@ -83,7 +88,9 @@ with db.transaction():
 		result["attachmentOf"] = None
 		try:
 			Document.create(**result)
-		except IntegrityError:
+		except IntegrityError as e:
+			print(e)
 			#only insert new rows, don't update existing rows
 			pass
+db.commit()
 

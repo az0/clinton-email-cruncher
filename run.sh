@@ -10,10 +10,21 @@ else
 	echo "activating existing venv"
 	source $VENVDIR/bin/activate
 fi
+
 mkdir -p pdfs/
-mkdir -p zips/
+
 python downloadMetadata.py
+if [ $? -ne 0 ]; then
+	echo "downloadMetadata.py failed"
+	exit 1
+fi
+
 python generatePDFList.py
+if [ $? -ne 0 ]; then
+	echo "downloadMetadata.py failed"
+	exit 1
+fi
+
 if [ "$1" = "no-pdf-download" ]
 then 
     echo "skipping PDF download"
@@ -22,6 +33,8 @@ else
 	wget --no-check-certificate --no-clobber --timeout=5 --tries=20 -i ../pdflist.txt
 	cd ..
 fi
+
+mkdir -p zips/
 python zipPDFs.py
 python pdfTextToDatabase.py
 deactivate

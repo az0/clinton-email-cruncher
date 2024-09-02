@@ -1,7 +1,8 @@
 certifi
 csvkit~=0.9
-pdfminer==20110515
-peewee~=2.6
+pdfminer
+peewee
 requests~=2.7
 requests-cache~=0.4
-slate==0.3
+#slate broken 2024-08-18
+#slate
