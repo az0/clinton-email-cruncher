@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-from peewee import SqliteDatabase, Model, CharField, DateField, TextField
+from peewee import SqliteDatabase, Model, CharField, DateField, TextField, IntegerField, FloatField, DateTimeField
 
 sqlite_db_fn = "hrcemail.sqlite"
 requests_cache_fn = "HRCEMAIL_metadata_cache"
@@ -25,6 +25,18 @@ class Document(BaseModel):
 	messageNumber = CharField(null=True)
 	caseNumber = CharField()
 	docText = TextField(null=True)
+	# Below fields added August 2024.
+	hashSum = CharField(null=True, max_length=32)
+	fileSize = IntegerField(null=True)
+	pageWidth = FloatField(null=True)
+	pageHeight = FloatField(null=True)
+	pageCount = IntegerField(null=True)
+	#pdfAuthor = CharField(max_length=255)
+	pdfCreationDate = DateTimeField(null=True)
+	pdfModificationDate = DateTimeField(null=True)
+	pdfCreatorSoftware = CharField(null=True)
+	pdfProducerSoftware = CharField(null=True)
+
 		
 class Name(BaseModel):
 	originalName = CharField(primary_key=True)

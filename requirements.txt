@@ -1,8 +1,7 @@
+PyPDF2
 certifi
 csvkit~=0.9
 pdfminer
 peewee
-requests~=2.7
 requests-cache~=0.4
-#slate broken 2024-08-18
-#slate
+requests~=2.7
