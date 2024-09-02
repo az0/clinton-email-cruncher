@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# encoding: utf-8
+
 """
 
 Quickly extract PDF metadata from each PDF and write to
