@@ -1,10 +1,8 @@
 # Get and analyze Hillary Clinton's email
 
-In response to a public records request, the U.S. State Department is releasing Hillary Clinton's email messages from her time as secretary of state. Every month, newly released messages are posted to [foia.state.gov](https://foia.state.gov/) as PDFs, with some metadata.
+In response to a public records request, the U.S. State Department released Hillary Clinton's email messages from her time as Secretary of State. Every month, newly released messages were posted to [foia.state.gov](https://foia.state.gov/) as PDFs with some metadata.
 
-This collection of tools automates downloading and helps analyze the messages. The Wall Steet Journal's interactive graphics team uses some of this code to power our [Clinton inbox search](http://graphics.wsj.com/hillary-clinton-email-documents/) interactive.
-
-We welcome your pull requests and issue reports.
+This collection of tools automates downloading and helps analyze the messages. The Wall Street Journal's interactive graphics team uses some of this code to power the [Clinton inbox search](http://graphics.wsj.com/hillary-clinton-email-documents/) interactive.
 
 ## What's in the toolkit
 * **run.sh** runs all of the Python scripts in the toolkit automatically, allowing easy updates when messages are released.
@@ -16,36 +14,29 @@ We welcome your pull requests and issue reports.
 
 * **HRCEMAIL_names.csv** is a list that pairs sender and recipient names provided by the State Department website with that person's commonly-used name. For example, `HRC` becomes `Hillary Clinton`.
 
+## Requirements
+
+* git
+* Python 3.x
+* wget
+
+Mac OS X users can install wget using [homebrew](http://brew.sh/).
+
+Downloading the PDFs can take around 30 minutes. If you don't want to download the PDFs, run `./run.sh no-pdf-download`.
+
 ## How to get started
 
 Clone the repo.
 ```
-git clone https://github.com/wsjdata/clinton-email-cruncher.git
+git clone https://github.com/az0/clinton-email-cruncher.git
 cd clinton-email-cruncher
 ```
-Install [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) if necessary.
-```
-pip install virtualenv
-```
 
-Create a virtual environment. **Python 2.7.9** is required, specifically for SSL (HTTPS) support. State Department's website requires HTTPS.
-```
-virtualenv -p /usr/bin/python2.7 virt-hrcemail
-source virt-hrcemail/bin/activate
-```
-
-Install all the Python dependencies. 
-```
-pip install -r requirements.txt
-```
-
-Then, run the shell script.
+Run the shell script.
 
 ```
 ./run.sh
 ```
-
-You will need `wget` to download the PDFs. (Mac OS X users can install it using [homebrew](http://brew.sh/).) Downloading the PDFs can take around 30 minutes. If you don't want to download the PDFs, run `./run.sh no-pdf-download`.
 
 Finally, load `HRCEMAIL_names.csv` into the `hrcemail.sqlite` database.
 ```
@@ -94,6 +85,6 @@ sqlite3 -header -csv hrcemail.sqlite "SELECT * FROM name ORDER BY commonName,ori
 
 * Extract the time the message was sent or received from the full text
 * Split the full text into constituent messages
-* Develop a list of phrases to remove from the full text (e.g. "PRODUCED TO HOUSE SELECT BENGHAZI COMM")
+* Develop a list of phrases to remove from the full text (e.g., "PRODUCED TO HOUSE SELECT BENGHAZI COMM")
 * Infer message threads
 * Pair attachments with their messages
