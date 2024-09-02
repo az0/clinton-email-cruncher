@@ -85,7 +85,14 @@ with db.transaction():
 	for result in results_list:
 		result["messageFrom"] = result["from"]
 		del result["from"]
-		result["docDate"] = formatTimestamp(result["docDate"])
+		if result['docDate'].startswith('0001-01-01'):
+			result['docDate'] = None
+		else:
+			result["docDate"] = formatTimestamp(result["docDate"])
+			if result["docDate"] < "1995-01-01":
+				raise ValueError(f"docDate {result['docDate']} is before 1995")
+			if result["docDate"] > datetime.now().strftime("%Y-%m-%d"):
+				raise ValueError(f"docDate {result['docDate']} is after today")
 		result["postedDate"] = formatTimestamp(result["postedDate"])
 		result["docID"] = result["pdfLink"][-13:][0:9]
 		result["attachmentOf"] = None
