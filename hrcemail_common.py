@@ -1,8 +1,11 @@
-#!/usr/bin/env python
 # encoding: utf-8
 
-from peewee import *
-db = SqliteDatabase("hrcemail.sqlite")
+from peewee import SqliteDatabase, Model, CharField, DateField, TextField
+
+sqlite_db_fn = "hrcemail.sqlite"
+requests_cache_fn = "HRCEMAIL_metadata_cache"
+pdf_list_fn = 'pdflist.txt'
+db = SqliteDatabase(sqlite_db_fn)
 
 class BaseModel(Model):
 	class Meta:
@@ -27,6 +30,7 @@ class Name(BaseModel):
 	originalName = CharField(primary_key=True)
 	commonName = CharField()
 
+db = SqliteDatabase(sqlite_db_fn)
 db.connect()
-#create tables if they don't exist
+# If they don't exist, create tables.
 db.create_tables([Document,Name])

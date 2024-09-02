@@ -16,9 +16,12 @@ import certifi
 import re
 import json
 import sys
-from hrcemail_common import *
 
-requests_cache.install_cache("HRCEMAIL_metadata_cache",expire_after=300)
+from peewee import IntegrityError
+
+from hrcemail_common import db, requests_cache_fn, Document
+
+requests_cache.install_cache(requests_cache_fn,expire_after=300)
 
 query_base = "https://foia.state.gov/api/Search/SubmitSimpleQuery"
 
@@ -89,8 +92,11 @@ with db.transaction():
 		try:
 			Document.create(**result)
 		except IntegrityError as e:
-			print(e)
-			#only insert new rows, don't update existing rows
-			pass
+			# Only insert new rows; don't update existing rows
+			# If "UNIQUE constraint failed: document.docID", then ignore the exception.
+			if not "UNIQUE constraint failed: document.docID" in str(e):
+				print(e)
+				import pdb;pdb.set_trace()			
+
 db.commit()
 
