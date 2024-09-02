@@ -21,7 +21,8 @@ from peewee import IntegrityError
 
 from hrcemail_common import db, requests_cache_fn, Document
 
-requests_cache.install_cache(requests_cache_fn,expire_after=300)
+# 1800 seconds = 30 minutes
+requests_cache.install_cache(requests_cache_fn,expire_after=1800)
 
 query_base = "https://foia.state.gov/api/Search/SubmitSimpleQuery"
 
