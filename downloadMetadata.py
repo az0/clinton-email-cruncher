@@ -24,7 +24,8 @@ from hrcemail_common import db, requests_cache_fn, Document
 # 1800 seconds = 30 minutes
 requests_cache.install_cache(requests_cache_fn,expire_after=1800)
 
-query_base = "https://foia.state.gov/api/Search/SubmitSimpleQuery"
+base_url = "https://foia.state.gov/"
+api_endpoint = base_url + "/api/Search/SubmitSimpleQuery"
 
 def getAPIPage(start=0,limit=1000,page=1):
 	params = {"searchText": "*",
@@ -40,7 +41,7 @@ def getAPIPage(start=0,limit=1000,page=1):
 	
 	#SSL certificate not verified by certifi module for some reason	
 	print(f"getAPIPage({start},{limit},{page})")
-	request = requests.get(query_base,params=params)
+	request = requests.get(api_endpoint,params=params)
 
 	if not request.status_code == 200:
 		print(f'ERROR: request.get() in getAPIPage() has status code {request.status_code}')
@@ -84,6 +85,7 @@ print("writing rows to SQLite database ...")
 
 with db.transaction():
 	for result in results_list:
+		result["pdfLink"] = base_url + result["pdfLink"]
 		result["messageFrom"] = result["from"]
 		del result["from"]
 		if result['docDate'].startswith('0001-01-01'):
