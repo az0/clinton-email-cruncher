@@ -11,11 +11,11 @@ pdfTextToDatabase.py
 
 """
 
+import argparse
+import io
 import json
 import os
-import string
 import sys
-import io
 
 from PIL import Image
 import fitz # PyMuPDF
@@ -67,18 +67,31 @@ def write_json(document, ocr_text):
                 ret[k] = v.isoformat()
         json.dump(ret, f, indent=2)
 
-def main():	
+from joblib import Parallel, delayed
+
+def main(argv=sys.argv[1:]):
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--max-cpu-count',
+        type=int,
+        default=-1,
+        help='how many CPUs to use for parallel processing')
+    args = parser.parse_args(argv)
+
     document = Document.select()
     
     print(f'processing {len(document):,} PDFs.')
     # Filter out documents that have already been processed
     # to improve tqdm time estimate.
     docs_to_process = [doc for doc in document if not os.path.isfile('json/'+doc.docID+'.json')]
-    for docID in tqdm(docs_to_process):
+
+    def process_doc(docID):
         this_docID = docID.docID
         pdf_filename = 'pdfs/'+this_docID+'.pdf'
         ocr_text = ocr_pdf(this_docID, pdf_filename)
         write_json(docID, ocr_text)
+
+    Parallel(n_jobs=args.max_cpu_count)(delayed(process_doc)(docID) for docID in tqdm(docs_to_process))
 
 if __name__ == '__main__':
     main()
