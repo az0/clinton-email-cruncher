@@ -24,6 +24,12 @@ Mac OS X users can install wget using [homebrew](http://brew.sh/).
 
 Downloading the PDFs can take around 30 minutes. If you don't want to download the PDFs, run `./run.sh no-pdf-download`.
 
+On Ubuntu, install tesseract for English and Arabic.
+
+```
+sudo apt install tesseract tesseract-ocr-ara tesseract-ocr-script-arab
+```
+
 ## How to get started
 
 Clone the repo.

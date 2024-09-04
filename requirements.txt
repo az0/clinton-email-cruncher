@@ -1,7 +1,8 @@
-PyPDF2
-certifi
-csvkit~=0.9
-pdfminer
-peewee
-requests-cache~=0.4
-requests~=2.7
+certifi # Network
+csvkit~=0.9 # Example usage in README
+peewee # ORM
+requests-cache~=0.4 # Network
+requests~=2.7 # Network
+Pillow # For PDF processing
+PyMuPDF # For PDF processing
+pytesseract # For PDF processing

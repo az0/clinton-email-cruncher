@@ -34,9 +34,20 @@ else
 	cd ..
 fi
 
+# Extract metadata such as page count, and store it in SQLite.
 python extractPDFMetadata.py
 
-mkdir -p zips/
-python zipPDFs.py # The ZIPs are not used by any other code here.
-python pdfTextToDatabase.py
+# The ZIPs are not used by any other code here.
+mkdir zips
+python zipPDFs.py
+
+# Perform OCR, and store text and metadata in JSON.
+mkdir json
+python pdfTextToJson.py
+
+# Extract text from each PDF (from OCR stored in PDF)
+# and store it in SQLite.
+# FIXME: broken
+#python pdfTextToDatabase.py
+
 deactivate

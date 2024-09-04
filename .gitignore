@@ -2,7 +2,10 @@ pdfs/
 zips/
 pdflist.txt
 virt-hrcemail/
-*.sqlite
-*.pyc
 *.bak
+*.json
+*.pdf
+*.pyc
+*.sqlite
+*.tiff
 *.zip
