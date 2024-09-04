@@ -11,19 +11,22 @@ pdfTextToDatabase.py
 
 """
 
+
 import argparse
-import io
 import json
 import os
 import sys
+import tempfile
+from joblib import Parallel, delayed
 
-from PIL import Image
-import fitz # PyMuPDF
+import fitz  # PyMuPDF
 import pytesseract
-from playhouse.shortcuts import model_to_dict # peewee
+from playhouse.shortcuts import model_to_dict  # peewee
 from tqdm import tqdm
+from PIL import Image
 
 from hrcemail_common import Document
+
 
 def ocr_pdf(docID, pdf_filename):
     """
@@ -54,6 +57,7 @@ def ocr_pdf(docID, pdf_filename):
 
     return extracted_text
 
+
 def write_json(document, ocr_text):
     """Write OCR text to json/docID.json"""
     json_fn = 'json/'+document.docID+'.json'
@@ -67,7 +71,6 @@ def write_json(document, ocr_text):
                 ret[k] = v.isoformat()
         json.dump(ret, f, indent=2)
 
-from joblib import Parallel, delayed
 
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser()
@@ -79,11 +82,12 @@ def main(argv=sys.argv[1:]):
     args = parser.parse_args(argv)
 
     document = Document.select()
-    
+
     print(f'processing {len(document):,} PDFs.')
     # Filter out documents that have already been processed
     # to improve tqdm time estimate.
-    docs_to_process = [doc for doc in document if not os.path.isfile('json/'+doc.docID+'.json')]
+    docs_to_process = [doc for doc in document if not os.path.isfile(
+        'json/'+doc.docID+'.json')]
 
     def process_doc(docID):
         this_docID = docID.docID
@@ -91,8 +95,9 @@ def main(argv=sys.argv[1:]):
         ocr_text = ocr_pdf(this_docID, pdf_filename)
         write_json(docID, ocr_text)
 
-    Parallel(n_jobs=args.max_cpu_count)(delayed(process_doc)(docID) for docID in tqdm(docs_to_process))
+    Parallel(n_jobs=args.max_cpu_count)(delayed(process_doc)(docID)
+                                        for docID in tqdm(docs_to_process, unit='PDF'))
+
 
 if __name__ == '__main__':
     main()
-

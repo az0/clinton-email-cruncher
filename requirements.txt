@@ -2,6 +2,7 @@ Pillow # For PDF processing
 PyMuPDF # For PDF processing
 certifi # Network
 csvkit~=0.9 # Example usage in README
+joblib
 peewee # ORM
 pytesseract # For PDF processing
 requests-cache~=0.4 # Network
