@@ -4,25 +4,25 @@
 """
 downloadMetadata.py
 
-1. Page through the Clinton_Email collection on state.foia.gov
+1. Page through the Clinton_Email collection on foia.state.gov
 2. Write rows to sqlite db, ON DUPLICATE KEY UPDATE VALUES
 
 """
 
-from datetime import datetime
-import requests
-import requests_cache
-import certifi
 import re
 import json
 import sys
+from datetime import datetime
 
+import requests
+import requests_cache
+import certifi
 from peewee import IntegrityError
 
 from hrcemail_common import db, requests_cache_fn, Document
 
-# 1800 seconds = 30 minutes
-requests_cache.install_cache(requests_cache_fn,expire_after=1800)
+# 60 * 30 seconds = 1800 seconds = 30 minutes
+requests_cache.install_cache(requests_cache_fn,expire_after=60 * 30)
 
 base_url = "https://foia.state.gov/"
 api_endpoint = base_url + "/api/Search/SubmitSimpleQuery"
@@ -39,7 +39,6 @@ def getAPIPage(start=0,limit=1000,page=1):
 	"start": start,
 	"limit": limit}
 	
-	#SSL certificate not verified by certifi module for some reason	
 	print(f"getAPIPage({start},{limit},{page})")
 	request = requests.get(api_endpoint,params=params)
 
@@ -80,7 +79,7 @@ def formatTimestamp(timestamp):
 
 results_list = compileResultsList()
 
-print(f"got {len(results_list)} total document rows")
+print(f"got {len(results_list):,} total document rows")
 print("writing rows to SQLite database ...")
 
 with db.transaction():

@@ -108,7 +108,7 @@ def extract_pdf_metadata(docID):
 def main():
     docIDs = Document.select(Document.docID).where(Document.pageCount >> None)
 
-    print(f'processing {len(docIDs)} PDFs.')
+    print(f'processing {len(docIDs):,} PDFs.')
     for docID in docIDs:
         docID = docID.docID
         meta = extract_pdf_metadata(docID)
