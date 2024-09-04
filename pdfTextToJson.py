@@ -37,6 +37,10 @@ def ocr_pdf(docID, pdf_filename):
     :return: Extracted text from the PDF
     """
     extracted_text = ""
+    lang = 'eng'
+    if docID == 'C05778404':
+        # Contains Arabic.
+        lang += '+ara'
 
     with fitz.open(pdf_filename) as pdf_document:
         for page_number in range(len(pdf_document)):
@@ -45,14 +49,13 @@ def ocr_pdf(docID, pdf_filename):
             zoom = 2
             mat = fitz.Matrix(zoom, zoom)
             pix = page.get_pixmap(matrix=mat)
-            img = Image.open(io.BytesIO(pix.tobytes()))
-            # Save a copy as TIFF for debugging.
-            # img.save('tiff/'+docID+'_page_'+str(page_number)+'.tiff')
-            lang = 'eng'
-            if docID == 'C05778404':
-                # Contains Arabic.
-                lang += '+ara'
-            text = pytesseract.image_to_string(img, lang=lang)
+            # Improve performance using ppm format and tmpfs directory.
+            with tempfile.NamedTemporaryFile(
+                    prefix='clinton',
+                    suffix='.ppm',
+                    dir='/dev/shm') as tmp:
+                tmp.write(pix.tobytes('ppm'))
+                text = pytesseract.image_to_string(tmp.name, lang=lang)
             extracted_text += text
 
     return extracted_text
