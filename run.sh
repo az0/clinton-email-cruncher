@@ -34,7 +34,9 @@ else
 	cd ..
 fi
 
+python extractPDFMetadata.py
+
 mkdir -p zips/
-python zipPDFs.py
+python zipPDFs.py # The ZIPs are not used by any other code here.
 python pdfTextToDatabase.py
 deactivate
