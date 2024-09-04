@@ -1,8 +1,9 @@
+Pillow # For PDF processing
+PyMuPDF # For PDF processing
 certifi # Network
 csvkit~=0.9 # Example usage in README
 peewee # ORM
+pytesseract # For PDF processing
 requests-cache~=0.4 # Network
 requests~=2.7 # Network
-Pillow # For PDF processing
-PyMuPDF # For PDF processing
-pytesseract # For PDF processing
+tqdm # Progress bar

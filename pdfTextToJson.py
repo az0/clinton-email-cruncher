@@ -21,9 +21,9 @@ from PIL import Image
 import fitz # PyMuPDF
 import pytesseract
 from playhouse.shortcuts import model_to_dict # peewee
+from tqdm import tqdm
 
-
-from hrcemail_common import Document, media_box_to_inches
+from hrcemail_common import Document
 
 def ocr_pdf(docID, pdf_filename):
     """
@@ -69,15 +69,16 @@ def write_json(document, ocr_text):
 
 def main():	
     document = Document.select()
+    
     print(f'processing {len(document):,} PDFs.')
-
-    for docID in document:
+    # Filter out documents that have already been processed
+    # to improve tqdm time estimate.
+    docs_to_process = [doc for doc in document if not os.path.isfile('json/'+doc.docID+'.json')]
+    for docID in tqdm(docs_to_process):
         this_docID = docID.docID
         pdf_filename = 'pdfs/'+this_docID+'.pdf'
-        print(f"Extracting text from {this_docID}")
         ocr_text = ocr_pdf(this_docID, pdf_filename)
         write_json(docID, ocr_text)
-        
 
 if __name__ == '__main__':
     main()
