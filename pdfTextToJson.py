@@ -66,7 +66,7 @@ def write_json(document, ocr_text):
     json_fn = 'json/'+document.docID+'.json'
     ret = model_to_dict(document)
     ret['text'] = ocr_text
-    with open(json_fn, 'w') as f:
+    with open(json_fn, 'w', encoding='utf-8') as f:
         # JSON can't handle dates
         import datetime
         for k, v in ret.items():
