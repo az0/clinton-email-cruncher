@@ -45,6 +45,8 @@ python zipPDFs.py
 mkdir json
 python pdfTextToJson.py
 
+python cleanText.py
+
 # Extract text from each PDF (from OCR stored in PDF)
 # and store it in SQLite.
 # FIXME: broken

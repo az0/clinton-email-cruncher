@@ -2,9 +2,11 @@ Pillow # For PDF processing
 PyMuPDF # For PDF processing
 certifi # Network
 csvkit~=0.9 # Example usage in README
-joblib
+fuzzywuzzy # Fix OCR.
+joblib # Process faster.
 peewee # ORM
 pytesseract # For PDF processing
+python-Levenshtein # Fix OCR.
 requests-cache~=0.4 # Network
 requests~=2.7 # Network
 tqdm # Progress bar
