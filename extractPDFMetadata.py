@@ -72,7 +72,7 @@ def extract_pdf_metadata(docID):
     Given document ID (e.g., C06130675), return a dictionary of metadata.
     """
     print(f"extracting PDF metadata from {docID}")
-    pdf_file_path = 'pdfs/'+docID+'.pdf'
+    pdf_file_path = f'pdf/{docID}.pdf'
     with open(pdf_file_path, 'rb') as pdf_f:
         pdf_reader = PyPDF2.PdfReader(pdf_f)
         info = pdf_reader.metadata

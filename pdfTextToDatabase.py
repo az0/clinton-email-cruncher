@@ -18,7 +18,7 @@ import sys
 
 def extract(filename):
 	try:
-		file = open('pdfs/'+filename+'.pdf', 'rb')
+		file = open(f'pdf/{filename}.pdf', 'rb')
 	except:
 		return None;
 	try:

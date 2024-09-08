@@ -9,7 +9,7 @@ This collection of tools automates downloading and helps analyze the messages. T
 
 * **downloadMetadata.py** scrapes sender, recipient, message date and subject from [the message list](https://foia.state.gov/Search/Results.aspx?collection=Clinton_Email) and writes this metadata to a sqlite database, `hrcemail.sqlite`.
 * **generatePDFList.py** writes `pdflist.txt`, a newline-delimited list of HTTPS URLs of the message PDFs.
-* **zipPDFs.py** makes a zip file of PDFs for each release of messages.
+* **zipPDF.py** makes a .zip archive of PDFs for each release of messages.
 * **pdfTextToDatabase.py** extracts text from the PDF files (which are OCR'd by State) and writes the text to a sqlite database, `hrcemail.sqlite`.
 
 * **HRCEMAIL_names.csv** is a list that pairs sender and recipient names provided by the State Department website with that person's commonly-used name. For example, `HRC` becomes `Hillary Clinton`.

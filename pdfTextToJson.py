@@ -63,7 +63,7 @@ def ocr_pdf(docID, pdf_filename):
 
 def write_json(document, ocr_text):
     """Write OCR text to json/docID.json"""
-    json_fn = 'json/'+document.docID+'.json'
+    json_fn = f'json/{document.docID}.json'
     ret = model_to_dict(document)
     ret['text'] = ocr_text
     with open(json_fn, 'w', encoding='utf-8') as f:
@@ -94,7 +94,7 @@ def main(argv=sys.argv[1:]):
 
     def process_doc(docID):
         this_docID = docID.docID
-        pdf_filename = 'pdfs/'+this_docID+'.pdf'
+        pdf_filename = f'pdf/{this_docID}.pdf'
         ocr_text = ocr_pdf(this_docID, pdf_filename)
         write_json(docID, ocr_text)
 

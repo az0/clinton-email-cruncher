@@ -11,7 +11,7 @@ else
 	source $VENVDIR/bin/activate
 fi
 
-mkdir -p pdfs/
+mkdir -p pdf/
 
 python downloadMetadata.py
 if [ $? -ne 0 ]; then
@@ -29,7 +29,7 @@ if [ "$1" = "no-pdf-download" ]
 then 
     echo "skipping PDF download"
 else
-    cd pdfs/
+    cd pdf/
 	wget --no-check-certificate --no-clobber --timeout=5 --tries=20 -i ../pdflist.txt
 	cd ..
 fi
@@ -38,8 +38,8 @@ fi
 python extractPDFMetadata.py
 
 # The ZIPs are not used by any other code here.
-mkdir zips
-python zipPDFs.py
+mkdir zip
+python zipPDF.py
 
 # Perform OCR, and store text and metadata in JSON.
 mkdir json

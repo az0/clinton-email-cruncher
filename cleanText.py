@@ -6,6 +6,8 @@ This script cleans up text in the JSON.
 A major sources of errors is OCR, and classification metadata is a major source of junk,
 
 The errors are extensive, and this script is far from perfect both in function and design.
+
+Copyright (C) 2024 by Andrew Ziem. See LICENSE for details.
 """
 
 import re
