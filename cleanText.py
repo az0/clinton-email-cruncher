@@ -158,22 +158,25 @@ UNCLASSIFIED STATE DEPT. - PRODUCED TO HOUSE SELECT BENGHAZI COMM.
 
     regex_as_strs = (
         r'UNCLASSIFIED.*(?:Date: \d{2}\/\d{2}\/\d{4}|Department.*Doc No)',
+        r'Date: \d{2}\/\d{2}\/\d{4}',
         r'Case No.? \w-\d{4}-\d{5}',  # Case No. F-2015-04841
         r'Date: \d{2}.*STATE-[\w\d]+',
         # Doc No. C05739665 STATE DEPT. - PRODUCED TO HOUSE SELECT BENGHAZI COMM.
         r'Doc No. C[\w]+.*COMM',
         r'Doc No.* C[\w]{5,10}',  # Doc No. C05739665 .
+        # PRODUCED TO HOUSE SELECT BENGHAZI COMM STATE DEPT
+        r'PRODUCED TO [A-Z\s]{10,30} BENGHAZI COMM( STATE DEPT)?',
         r'UNCLASSIFIED STATE.*BENG.{2,6} COMM.?',
         # U.S. Department of State SUBJECT TO AGREEMENT ON SENSITIVE INFORMATION & REDACTIONS. NO FOIA WAIVER
         r'U.S. Depart.+FOIA WAIVER',
-        r'UNCLASSIFIED',  # UNCLASSIFIED
-        r'U.S. Department of State',  # U.S. Department of State
-        r'SENSITIVE BUT UNCLASSIFIED',  # SENSITIVE BUT UNCLASSIFIED
+        # SUBJECT TO AGREEMENT ON SENSITIVE INFORMATION & REDACTIONS
+        r'SUBJECT TO [A-Z\s&]{10,40} REDACTIONS',
+        r'(UNCLASSIFIED|NO FOIA WAIVER|U.S. Department of State|SENSITIVE BUT UNCLASSIFIED|This email is UNCLASSIFIED|STATE DEPT)',
         # ~ Reason: 1.4(D) ~ Declassify on: 08/14/2024
         r'Reason: \d.+Declassify.*\d{4}',
-        r'This email is UNCLASSIFIED.',  # This email is UNCLASSIFIED.
         # UNCLASSIFIED US Deparmertf Slate Case No, F-20078 Duc No, COBYEE210 Date: 0430208
-        r'UNCLASSIFIED.+Depar.+Date: \d+'
+        r'UNCLASSIFIED.+Depar.+Date: \d+',
+        r'(STATE-S)?C[B\d]\d{7}',  # document code like C05739658
     )
     unclassified_regexes = []
     for regex_str in regex_as_strs:
@@ -479,6 +482,14 @@ From: Jiloty, Lauren C [mailto:JilotyLC@state.gov}"""
             '~ Reason: 1.4(D) ~ Declassify on: 08/14/2024',
             'SENSITIVE BUT UNCLASSIFIED',
             'This email is UNCLASSIFIED.',
+            'Date: 05/13/2015',
+            '. C05739658',
+            'STATE DEPT.',
+            '- PRODUCED TO HOUSE SELECT BENGHAZI COMM STATE DEPT.',
+            '- PRODUCED TO HOUSE SELECT BENGHAZI COMM.',
+            'SUBJECT TO AGREEMENT ON SENSITIVE INFORMATION & REDACTIONS.',
+            'NO FOIA WAIVER.',
+            'STATE-SCB0045338'
         )
         num_tests = len(all_tests)
         for this_test in all_tests:
