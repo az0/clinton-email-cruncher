@@ -79,6 +79,9 @@ def clean_email_envelope(text: str) -> str:
     # Fix OCR error like 'rom: Robert Einhorn [mailto:'
     if re.match(r'(?i)^rom: .*(mailto|@(state|clint))', text):
         text = 'F' + text
+    # Fix 'Subiect:' to 'Subject:' and 'Ce:' to 'CC:' only at beginning of line
+    text = re.sub(r'(?i)^Subiect[:;]', 'Subject:', text)
+    text = re.sub(r'(?i)^Ce[:;]', 'CC:', text)
     # Check if this is an envelope line.
     envelope_re = re.compile(r"(?i)[^a-zA-Z0-9]*(From|To|Cc|Ce|Bcc)[:;] ")
     if re.match(envelope_re, text):
