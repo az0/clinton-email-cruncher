@@ -1,5 +1,6 @@
 pdfs/
 zips/
+dev/
 pdflist.txt
 virt-hrcemail/
 *.bak
@@ -9,3 +10,5 @@ virt-hrcemail/
 *.sqlite
 *.tiff
 *.zip
+*.7z
+*code-workspace
